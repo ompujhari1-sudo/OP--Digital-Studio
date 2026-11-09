@@ -1,106 +1,410 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0a0a0a">
-  <meta name="description" content="OP Digital Studio builds thoughtful websites, digital identities and social media experiences for ambitious brands and creators.">
-  <title>OP Digital Studio — Make Your Digital Presence Matter</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DocuMind AI – Developer Knowledge Platform</title>
+<meta name="description" content="DocuMind AI helps developers understand technical documentation, debug errors, compare document versions and get answers backed by sources.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b1020; --bg2:#10172b; --card:#141c34; --line:#243050;
+  --text:#e8ecf7; --muted:#9aa6c4; --accent:#6c7bff; --accent2:#22d3b6;
+  --warn:#f5b84b; --danger:#ff6b81; --ok:#34d399;
+  --radius:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+a{color:inherit;text-decoration:none}
+.container{max-width:1120px;margin:0 auto;padding:0 20px}
+code,pre,.mono{font-family:'JetBrains Mono',monospace}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:50;background:rgba(11,16,32,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.1rem}
+.logo-mark{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;font-size:.9rem;color:#fff}
+.nav-links{display:flex;gap:26px;font-size:.92rem;color:var(--muted)}
+.nav-links a:hover{color:var(--text)}
+.btn{display:inline-block;padding:11px 20px;border-radius:10px;font-weight:600;font-size:.92rem;border:1px solid transparent;cursor:pointer;transition:.2s;font-family:inherit}
+.btn-primary{background:linear-gradient(135deg,var(--accent),#8a6cff);color:#fff}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(108,123,255,.35)}
+.btn-ghost{border-color:var(--line);color:var(--text);background:transparent}
+.btn-ghost:hover{border-color:var(--accent)}
+.menu-btn{display:none;background:none;border:0;color:var(--text);font-size:1.5rem;cursor:pointer}
+
+/* HERO */
+.hero{padding:90px 0 70px;text-align:center;background:radial-gradient(900px 400px at 50% -10%,rgba(108,123,255,.25),transparent)}
+.badge{display:inline-block;padding:6px 14px;border:1px solid var(--line);border-radius:99px;font-size:.8rem;color:var(--accent2);background:rgba(34,211,182,.08);margin-bottom:22px}
+.hero h1{font-size:clamp(2.1rem,5vw,3.7rem);line-height:1.12;font-weight:800;letter-spacing:-.02em;max-width:820px;margin:0 auto 20px}
+.grad{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{max-width:640px;margin:0 auto 32px;color:var(--muted);font-size:1.1rem}
+.hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.stats{display:flex;justify-content:center;gap:42px;margin-top:54px;flex-wrap:wrap}
+.stat b{display:block;font-size:1.6rem}
+.stat span{color:var(--muted);font-size:.85rem}
+
+/* SECTIONS */
+section{padding:80px 0}
+.alt{background:var(--bg2)}
+.eyebrow{color:var(--accent2);font-weight:600;font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px}
+h2{font-size:clamp(1.7rem,3.4vw,2.4rem);font-weight:800;letter-spacing:-.01em;margin-bottom:14px}
+.lead{color:var(--muted);max-width:650px;margin-bottom:44px}
+.center{text-align:center}.center .lead{margin-left:auto;margin-right:auto}
+.grid{display:grid;gap:18px}
+.g3{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px;transition:.2s}
+.card:hover{border-color:var(--accent);transform:translateY(-3px)}
+.icon{width:42px;height:42px;border-radius:11px;background:rgba(108,123,255,.15);display:grid;place-items:center;font-size:1.25rem;margin-bottom:14px}
+.card h3{font-size:1.05rem;margin-bottom:6px}
+.card p{color:var(--muted);font-size:.93rem}
+
+/* STAGES */
+.stages{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;counter-reset:s}
+.stage{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px 22px 22px 22px}
+.stage::before{counter-increment:s;content:counter(s);position:absolute;top:-14px;left:18px;width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;font-weight:700;font-size:.82rem}
+.stage h4{margin:6px 0 4px}
+.stage p{color:var(--muted);font-size:.9rem}
+
+/* MODES */
+.mode .tag{display:inline-block;font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:99px;margin-bottom:12px}
+.tag-a{background:rgba(52,211,153,.15);color:var(--ok)}
+.tag-b{background:rgba(108,123,255,.18);color:var(--accent)}
+.tag-c{background:rgba(245,184,75,.16);color:var(--warn)}
+.flow{font-size:.8rem;color:var(--muted);margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
+
+/* DEMO */
+.demo{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.4)}
+.tabs{display:flex;gap:4px;padding:10px;background:#0e152a;border-bottom:1px solid var(--line);overflow-x:auto}
+.tab{padding:9px 16px;border-radius:9px;background:none;border:0;color:var(--muted);font:600 .86rem 'Inter';cursor:pointer;white-space:nowrap}
+.tab.active{background:var(--accent);color:#fff}
+.panel{display:none;padding:22px}
+.panel.active{display:block}
+.chat-box{height:340px;overflow-y:auto;display:flex;flex-direction:column;gap:14px;padding:4px 4px 14px}
+.msg{max-width:86%;padding:12px 16px;border-radius:14px;font-size:.93rem}
+.msg.user{align-self:flex-end;background:var(--accent);color:#fff;border-bottom-right-radius:4px}
+.msg.ai{align-self:flex-start;background:#1b2543;border:1px solid var(--line);border-bottom-left-radius:4px}
+.label{display:inline-block;font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:6px;margin-bottom:8px}
+.l-doc{background:rgba(52,211,153,.15);color:var(--ok)}
+.l-ext{background:rgba(245,184,75,.16);color:var(--warn)}
+.cite{margin-top:10px;padding:9px 12px;background:#0e152a;border-left:3px solid var(--accent2);border-radius:6px;font-size:.82rem;color:var(--muted)}
+.cite b{color:var(--accent2)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.chip{padding:6px 12px;border:1px solid var(--line);border-radius:99px;font-size:.8rem;color:var(--muted);background:none;cursor:pointer;font-family:inherit}
+.chip:hover{border-color:var(--accent);color:var(--text)}
+.input-row{display:flex;gap:10px;margin-top:8px}
+input[type=text],textarea,select{flex:1;background:#0e152a;border:1px solid var(--line);color:var(--text);padding:12px 14px;border-radius:10px;font:inherit;font-size:.92rem}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
+textarea{width:100%;min-height:110px;resize:vertical;font-family:'JetBrains Mono',monospace;font-size:.84rem}
+.row{display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.result{margin-top:16px;padding:16px;border-radius:12px;background:#0e152a;border:1px solid var(--line);font-size:.92rem;display:none}
+.result.show{display:block}
+.result h5{margin:10px 0 4px;font-size:.88rem;color:var(--accent2)}
+.result ul{padding-left:20px;color:var(--muted)}
+pre{background:#080d1c;border:1px solid var(--line);padding:12px;border-radius:8px;overflow-x:auto;font-size:.8rem;margin-top:8px}
+/* compare */
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.cmp-col{background:#0e152a;border:1px solid var(--line);border-radius:10px;padding:14px;font-size:.88rem}
+.cmp-col h5{font-size:.78rem;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em}
+.del{background:rgba(255,107,129,.18);color:var(--danger);padding:1px 4px;border-radius:4px;text-decoration:line-through}
+.add{background:rgba(52,211,153,.18);color:var(--ok);padding:1px 4px;border-radius:4px}
+.note{margin-top:12px;font-size:.85rem;padding:10px 14px;border-radius:8px;background:rgba(245,184,75,.1);border:1px solid rgba(245,184,75,.3);color:var(--warn)}
+/* library */
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+th,td{text-align:left;padding:11px 10px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em}
+.st{padding:3px 10px;border-radius:99px;font-size:.74rem;font-weight:600}
+.st-ok{background:rgba(52,211,153,.15);color:var(--ok)}
+.st-pr{background:rgba(245,184,75,.16);color:var(--warn)}
+.drop{margin-top:16px;border:2px dashed var(--line);border-radius:12px;padding:26px;text-align:center;color:var(--muted);cursor:pointer;font-size:.9rem}
+.drop:hover{border-color:var(--accent)}
+
+/* SECURITY / CTA */
+.checks{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.check{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;background:var(--card);border:1px solid var(--line);border-radius:12px;font-size:.92rem}
+.check span:first-child{color:var(--ok);font-weight:700}
+.cta{text-align:center;background:linear-gradient(135deg,rgba(108,123,255,.2),rgba(34,211,182,.12));border:1px solid var(--line);border-radius:22px;padding:60px 24px}
+form.contact{max-width:460px;margin:26px auto 0;display:flex;gap:10px;flex-wrap:wrap}
+footer{border-top:1px solid var(--line);padding:34px 0;color:var(--muted);font-size:.86rem}
+.foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px}
+
+@media(max-width:780px){
+  .nav-links{display:none;position:absolute;top:64px;left:0;right:0;flex-direction:column;background:var(--bg);padding:18px 20px;border-bottom:1px solid var(--line)}
+  .nav-links.open{display:flex}
+  .menu-btn{display:block}
+  .nav-cta{display:none}
+  .cmp{grid-template-columns:1fr}
+  section{padding:56px 0}
+}
+</style>
 </head>
 <body>
-  <div class="announcement"><span class="pulse"></span> INDEPENDENT DIGITAL STUDIO <span class="announce-divider">/</span> AVAILABLE FOR SELECT PROJECTS</div>
-  <header class="site-header">
-    <a class="brand" href="#top" aria-label="OP Digital Studio home"><span class="brand-mark">OP<span>.</span></span><span class="brand-name">DIGITAL STUDIO</span></a>
-    <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false"><span></span><span></span></button>
-    <nav class="nav-links">
-      <a href="#about">Studio</a><a href="#services">Services</a><a href="#work">Selected work</a><a href="#process">Process</a>
-      <a class="nav-cta" href="#contact">Let's talk <span>↗</span></a>
-    </nav>
-  </header>
 
-  <main id="top">
-    <section class="hero section-wrap">
-      <div class="hero-copy reveal">
-        <p class="eyebrow"><span>01</span> DESIGN · DEVELOPMENT · DIGITAL GROWTH</p>
-        <h1>Make your<br>digital presence<br><em>matter.</em></h1>
-        <p class="hero-intro">We turn ambitious ideas into thoughtful digital experiences — from standout websites to content-led brand presence.</p>
-        <div class="hero-actions"><a class="button button-orange" href="#contact">Start a project <span>↗</span></a><a class="text-link" href="#work">Explore our work <span>↓</span></a></div>
-      </div>
-      <div class="hero-art reveal" aria-label="Abstract studio graphic">
-        <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
-        <div class="art-core"><span>OP</span><small>IDEAS IN<br>GOOD FORM</small></div>
-        <div class="art-label label-top">CREATIVE<br>THINKING</div><div class="art-label label-bottom">DIGITAL<br>CRAFT</div>
-        <div class="art-dot"></div>
-      </div>
-      <div class="hero-bottom"><span>INDEPENDENT BY DESIGN.</span><span>BUILT FOR WHAT'S NEXT <b>↘</b></span></div>
-    </section>
+<nav>
+  <div class="container nav-in">
+    <a href="#top" class="logo"><span class="logo-mark">D</span>DocuMind AI</a>
+    <div class="nav-links" id="links">
+      <a href="#how">How it works</a>
+      <a href="#modes">Answer modes</a>
+      <a href="#features">Features</a>
+      <a href="#demo">Live demo</a>
+      <a href="#security">Security</a>
+    </div>
+    <a href="#contact" class="btn btn-primary nav-cta">Get early access</a>
+    <button class="menu-btn" onclick="document.getElementById('links').classList.toggle('open')" aria-label="Menu">☰</button>
+  </div>
+</nav>
 
-    <section class="intro section-wrap" id="about">
-      <div class="section-kicker reveal">THE STUDIO <span>— 02</span></div>
-      <div class="intro-content reveal">
-        <h2>Good design gets attention.<br><em>Great digital experiences</em><br>make it count.</h2>
-        <div class="intro-text"><p>OP Digital Studio is an independent creative web and digital studio founded by Om Pujhari. We bring design, technology and content together to help businesses and creators build a stronger presence online.</p><p>From the first idea to the final launch, every detail has a purpose: make it clear, make it useful, make it memorable.</p><a class="under-link" href="#contact">A little about your next idea <span>↗</span></a></div>
-      </div>
-      <div class="principles"><div><b>01 / THINK</b><span>Understand the brand and the people it serves.</span></div><div><b>02 / CREATE</b><span>Shape ideas into clear, considered experiences.</span></div><div><b>03 / GROW</b><span>Build a digital foundation made to move forward.</span></div></div>
-    </section>
+<header class="hero" id="top">
+  <div class="container">
+    <span class="badge">● AI-powered Developer Knowledge Platform</span>
+    <h1>Stop searching docs. <span class="grad">Start getting answers</span> backed by evidence.</h1>
+    <p>DocuMind AI turns your technical documents into a searchable workspace. Ask questions, debug errors and compare versions, with every answer linked to its source.</p>
+    <div class="hero-cta">
+      <a href="#demo" class="btn btn-primary">Try the live demo</a>
+      <a href="#how" class="btn btn-ghost">See how it works</a>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>PDF + Markdown</b><span>Document ingestion</span></div>
+      <div class="stat"><b>Page-level</b><span>Source citations</span></div>
+      <div class="stat"><b>3 modes</b><span>Document, External, Hybrid</span></div>
+    </div>
+  </div>
+</header>
 
-    <section class="services-section" id="services">
-      <div class="section-wrap">
-        <div class="section-kicker reveal">WHAT WE DO <span>— 03</span></div>
-        <div class="section-heading reveal"><h2>One studio.<br><em>Many ways to grow.</em></h2><p>Creative thinking backed by practical execution. Choose one service or bring us the bigger picture.</p></div>
-        <div class="service-list">
-          <article class="service-row reveal"><span class="service-number">01</span><div><h3>Website design & development</h3><p>Modern, responsive websites and web experiences designed to communicate clearly and turn visits into meaningful enquiries.</p><div class="chips"><span>Business websites</span><span>Landing pages</span><span>Web applications</span></div></div><span class="service-arrow">↗</span></article>
-          <article class="service-row reveal"><span class="service-number">02</span><div><h3>Social media management</h3><p>Consistent, brand-aligned social presence through content planning, publishing support and profile management.</p><div class="chips"><span>Content calendars</span><span>Profile management</span><span>Brand consistency</span></div></div><span class="service-arrow">↗</span></article>
-          <article class="service-row reveal"><span class="service-number">03</span><div><h3>Creator account support</h3><p>Organised digital support for content creators, including account coordination, content workflow planning and profile presentation.</p><div class="chips"><span>Creator profiles</span><span>Content coordination</span><span>Workflow support</span></div></div><span class="service-arrow">↗</span></article>
-          <article class="service-row reveal"><span class="service-number">04</span><div><h3>Digital brand presence</h3><p>Bring your website, social channels and visual communication together into a recognisable, consistent identity.</p><div class="chips"><span>Digital identity</span><span>Creative direction</span><span>Online presence</span></div></div><span class="service-arrow">↗</span></article>
+<section id="how" class="alt">
+  <div class="container">
+    <div class="center">
+      <div class="eyebrow">The complete system</div>
+      <h2>From question to verified answer in 7 stages</h2>
+      <p class="lead">DocuMind does not train its own model. It combines an existing AI API with our own retrieval, verification and workflow systems.</p>
+    </div>
+    <div class="stages" style="margin-top:20px">
+      <div class="stage"><h4>User Input</h4><p>Ask a question, upload a PDF, paste an error or a code snippet.</p></div>
+      <div class="stage"><h4>Request Processing</h4><p>The backend detects the task type and checks permissions and limits.</p></div>
+      <div class="stage"><h4>Knowledge Retrieval</h4><p>Keyword and semantic search find only the relevant chunks.</p></div>
+      <div class="stage"><h4>Context Preparation</h4><p>Question, excerpts, page numbers and instructions are packaged.</p></div>
+      <div class="stage"><h4>AI Processing</h4><p>The model explains, summarises and connects the evidence.</p></div>
+      <div class="stage"><h4>Validation</h4><p>Cited documents and pages are verified. Invented sources are rejected.</p></div>
+      <div class="stage"><h4>Final Response</h4><p>A clear answer with citations and an uncertainty notice when needed.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="modes">
+  <div class="container">
+    <div class="eyebrow">Hybrid answering</div>
+    <h2>Always clear where an answer comes from</h2>
+    <p class="lead">DocuMind never presents an AI suggestion as a fact from your document. Every answer is labelled.</p>
+    <div class="grid g3">
+      <div class="card mode"><span class="tag tag-a">MODE A</span><h3>Document-Grounded</h3><p>Answers come from your selected documents, with page references and supporting excerpts.</p><div class="flow">Question → Search → Chunks → AI → Sources</div></div>
+      <div class="card mode"><span class="tag tag-b">MODE B</span><h3>External AI</h3><p>For general questions or when the document lacks the answer. Clearly labelled as AI-generated.</p><div class="flow">Question → Backend → AI API → Checks</div></div>
+      <div class="card mode"><span class="tag tag-c">MODE C</span><h3>Hybrid</h3><p>Evidence from your docs plus extra explanation and code, each part labelled separately.</p><div class="flow">Search → Evidence → AI → Labelled answer</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="features" class="alt">
+  <div class="container">
+    <div class="center">
+      <div class="eyebrow">Features</div>
+      <h2>Built for how developers actually work</h2>
+    </div>
+    <div class="grid g4" style="margin-top:34px">
+      <div class="card"><div class="icon">💬</div><h3>Knowledge Chat</h3><p>Ask questions in plain language and open the exact source excerpt behind each answer.</p></div>
+      <div class="card"><div class="icon">📚</div><h3>Document Library</h3><p>Upload, organise and track indexing status of PDFs and Markdown files by project.</p></div>
+      <div class="card"><div class="icon">🐞</div><h3>Debugging Assistant</h3><p>Paste an error and code. Get possible causes and reasoned debugging steps.</p></div>
+      <div class="card"><div class="icon">🔀</div><h3>Version Comparison</h3><p>See added, removed and changed content side by side, with the impact explained.</p></div>
+      <div class="card"><div class="icon">🔎</div><h3>Hybrid Search</h3><p>Keyword matching plus semantic embeddings, with metadata and page filters.</p></div>
+      <div class="card"><div class="icon">🧾</div><h3>OCR Support</h3><p>Scanned PDFs are converted to searchable text so nothing is left out.</p></div>
+      <div class="card"><div class="icon">✅</div><h3>Citation Checks</h3><p>Every cited document ID and page is verified before it is shown to you.</p></div>
+      <div class="card"><div class="icon">⚙️</div><h3>Provider Settings</h3><p>Manage AI providers, privacy controls and retention from one place.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="demo">
+  <div class="container">
+    <div class="center">
+      <div class="eyebrow">Interactive preview</div>
+      <h2>Try DocuMind AI</h2>
+      <p class="lead">This is a front-end preview with sample data. In the real product these screens connect to the Python backend.</p>
+    </div>
+
+    <div class="demo">
+      <div class="tabs" id="tabs">
+        <button class="tab active" data-p="chat">💬 Knowledge Chat</button>
+        <button class="tab" data-p="lib">📚 Library</button>
+        <button class="tab" data-p="debug">🐞 Debugging</button>
+        <button class="tab" data-p="cmp">🔀 Comparison</button>
+      </div>
+
+      <!-- CHAT -->
+      <div class="panel active" id="p-chat">
+        <div class="chips">
+          <button class="chip" data-q="What authentication method does this API manual specify?">Auth method in the manual</button>
+          <button class="chip" data-q="How long are access tokens valid?">Token validity</button>
+          <button class="chip" data-q="Explain how GraphQL subscriptions work">General question</button>
+        </div>
+        <div class="chat-box" id="chat">
+          <div class="msg ai">Hi! Ask me anything about <b>PaymentsAPI_Manual_v2.pdf</b>, or try a suggested question above.</div>
+        </div>
+        <div class="input-row">
+          <input type="text" id="q" placeholder="Ask a question about your documents..." />
+          <button class="btn btn-primary" id="send">Send</button>
         </div>
       </div>
-    </section>
 
-    <section class="work-section section-wrap" id="work">
-      <div class="section-kicker reveal">SELECTED WORK <span>— 04</span></div>
-      <div class="section-heading reveal"><h2>Built with intent.<br><em>Made to be useful.</em></h2><p>A look at projects and concepts from the studio. Each one starts with a problem worth solving.</p></div>
-      <div class="work-grid">
-        <a class="work-card linksentry reveal" href="https://linksentry-om.onrender.com" target="_blank" rel="noopener noreferrer"><div class="work-visual"><div class="scan-window"><span class="scan-top">LINKSENTRY / URL CHECK</span><div class="scan-line"></div><div class="scan-status">LINK ANALYSIS <b>● COMPLETE</b></div><div class="scan-score">SAFE<span>?</span></div></div><span class="visual-index">PROJECT / 001</span></div><div class="work-meta"><div><span>WEB APP · SECURITY TOOL</span><h3>LinkSentry</h3><p>A URL security scanner concept that helps people inspect links and spot common warning signs.</p></div><span class="work-link">↗</span></div></a>
-        <div class="work-card reachora reveal"><div class="work-visual"><div class="reachora-type">reach<span>ora.</span><small>MAKE YOUR PRESENCE COUNT</small></div><span class="visual-index">PROJECT / 002</span></div><div class="work-meta"><div><span>DIGITAL GROWTH · STUDIO CONCEPT</span><h3>Reachora</h3><p>A digital growth studio concept exploring social media services and a more consistent online presence.</p></div><span class="work-link">↗</span></div></div>
+      <!-- LIBRARY -->
+      <div class="panel" id="p-lib">
+        <table>
+          <thead><tr><th>Document</th><th>Type</th><th>Pages</th><th>Status</th></tr></thead>
+          <tbody id="docs">
+            <tr><td>PaymentsAPI_Manual_v2.pdf</td><td>PDF</td><td>84</td><td><span class="st st-ok">Indexed</span></td></tr>
+            <tr><td>Auth_Guide.md</td><td>Markdown</td><td>12</td><td><span class="st st-ok">Indexed</span></td></tr>
+            <tr><td>Webhooks_Reference.pdf</td><td>PDF</td><td>46</td><td><span class="st st-pr">Processing</span></td></tr>
+          </tbody>
+        </table>
+        <label class="drop" for="file">📄 Click to choose a PDF or Markdown file<input type="file" id="file" accept=".pdf,.md" hidden></label>
       </div>
-      <p class="work-note">Selected work includes live projects and studio concepts. More case studies will be added as projects are ready to share.</p>
-    </section>
 
-    <section class="statement"><div class="section-wrap reveal"><p>OUR POINT OF VIEW</p><h2>Your brand deserves<br>more than <em>just online.</em></h2><span>It deserves a digital presence with purpose.</span></div></section>
+      <!-- DEBUG -->
+      <div class="panel" id="p-debug">
+        <div class="row">
+          <select id="lang"><option>Python</option><option>JavaScript</option><option>Java</option></select>
+          <input type="text" id="err" value="ModuleNotFoundError: No module named 'requests'">
+        </div>
+        <textarea id="code">import requests
+r = requests.get("https://api.example.com/data")
+print(r.json())</textarea>
+        <div style="margin-top:12px"><button class="btn btn-primary" id="analyze">Analyze error</button></div>
+        <div class="result" id="debug-out">
+          <h5>Likely cause</h5>
+          <p>The Python interpreter running your script cannot find a package named <code>requests</code>. It is usually not installed in the <b>active</b> environment, or you are using a different interpreter than the one you installed it in.</p>
+          <h5>Steps to investigate</h5>
+          <ul>
+            <li>Check which interpreter runs your code, because pip may have installed to another one.</li>
+            <li>Install into that same interpreter so both always match.</li>
+            <li>If you use a virtual environment, make sure it is activated.</li>
+          </ul>
+          <pre>python -m pip --version
+python -m pip install requests</pre>
+          <p class="note">This is an AI-generated suggestion. Test it in your environment to confirm.</p>
+        </div>
+      </div>
 
-    <section class="process-section section-wrap" id="process">
-      <div class="section-kicker reveal">HOW WE WORK <span>— 05</span></div>
-      <div class="section-heading reveal"><h2>Clear process.<br><em>Thoughtful results.</em></h2><p>No unnecessary complexity. Just a collaborative process with clear steps.</p></div>
-      <div class="process-grid"><div class="process-card reveal"><span>01</span><h3>Discover</h3><p>We learn about your goals, audience, brand and what success should look like.</p></div><div class="process-card reveal"><span>02</span><h3>Define</h3><p>We agree on the scope, direction, deliverables and a realistic timeline.</p></div><div class="process-card reveal"><span>03</span><h3>Design & build</h3><p>We create, review and refine the experience with your feedback along the way.</p></div><div class="process-card reveal"><span>04</span><h3>Launch & support</h3><p>We prepare the final handover and discuss any ongoing support you may need.</p></div></div>
-    </section>
+      <!-- COMPARE -->
+      <div class="panel" id="p-cmp">
+        <div class="cmp">
+          <div class="cmp-col"><h5>Version A (v1.0)</h5>
+            <p>The API accepts access tokens valid for <span class="del">60 minutes</span>.</p>
+            <p style="margin-top:8px">Rate limit: <span class="del">100</span> requests per minute.</p>
+          </div>
+          <div class="cmp-col"><h5>Version B (v2.0)</h5>
+            <p>The API accepts access tokens valid for <span class="add">30 minutes</span>.</p>
+            <p style="margin-top:8px">Rate limit: <span class="add">100</span> requests per minute.</p>
+          </div>
+        </div>
+        <div class="result show" style="margin-top:16px">
+          <span class="label l-doc">OBSERVED CHANGE</span>
+          <p>Token validity was reduced from 60 minutes to 30 minutes.</p>
+          <span class="label l-ext" style="margin-top:12px">INFERRED IMPACT</span>
+          <p>Clients may need to refresh tokens twice as often. Review any token-refresh logic that assumes a 60-minute lifetime.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <section class="why-section">
-      <div class="section-wrap why-layout"><div class="why-heading reveal"><div class="section-kicker">WHY OP <span>— 06</span></div><h2>Small studio.<br><em>Personal focus.</em></h2></div><div class="why-points"><div class="why-point reveal"><b>01</b><div><h3>Direct collaboration</h3><p>Work directly with the person shaping and building your project.</p></div></div><div class="why-point reveal"><b>02</b><div><h3>Design with purpose</h3><p>Visual decisions are guided by your brand, audience and goals.</p></div></div><div class="why-point reveal"><b>03</b><div><h3>Practical technology</h3><p>Useful, responsive solutions built with maintainability in mind.</p></div></div><div class="why-point reveal"><b>04</b><div><h3>Honest communication</h3><p>Clear scope, realistic expectations and no made-up promises.</p></div></div></div></div>
-    </section>
+<section id="security" class="alt">
+  <div class="container">
+    <div class="eyebrow">Security and privacy</div>
+    <h2>Your documents stay yours</h2>
+    <p class="lead">We store only what the product needs and give you control over deleting it.</p>
+    <div class="checks">
+      <div class="check"><span>✓</span><span>Document-level access permissions</span></div>
+      <div class="check"><span>✓</span><span>Uploads validated by type and size</span></div>
+      <div class="check"><span>✓</span><span>API keys kept on the backend only</span></div>
+      <div class="check"><span>✓</span><span>One user's documents never appear in another's results</span></div>
+      <div class="check"><span>✓</span><span>Delete documents and conversations anytime</span></div>
+      <div class="check"><span>✓</span><span>Request limits and usage monitoring</span></div>
+    </div>
+  </div>
+</section>
 
-    <section class="contact-section" id="contact"><div class="section-wrap contact-layout">
-      <div class="contact-copy reveal"><div class="section-kicker">LET'S MAKE SOMETHING <span>— 07</span></div><h2>Have an idea?<br><em>Let's build it.</em></h2><p>Tell us what you're working on. Share a little about your brand, your goals or the challenge you want to solve.</p><a class="email-link" href="mailto:{{ contact_email }}">{{ contact_email }} <span>↗</span></a></div>
-      <form class="contact-form reveal" action="{{ url_for('contact') }}" method="POST">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <label class="honeypot" aria-hidden="true">Leave this field empty<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
-        <label>Your name<input type="text" name="name" placeholder="Name" maxlength="100" required></label>
-        <label>Your email<input type="email" name="email" placeholder="you@example.com" maxlength="254" required></label>
-        <label>What do you need?<select name="service"><option>Website design & development</option><option>Social media management</option><option>Creator account support</option><option>Digital brand presence</option><option>Something else</option></select></label>
-        <label>Tell us about your project<textarea name="message" rows="4" maxlength="4000" placeholder="A little about your idea, goals and timeline..." required></textarea></label>
-        <button class="button button-orange submit-button" type="submit">Send enquiry <span>↗</span></button>
-        <p class="form-note">Your message is sent to our studio inbox. We only use your details to respond to your enquiry.</p>
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}{% for category, message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}{% endif %}
-        {% endwith %}
+<section id="contact">
+  <div class="container">
+    <div class="cta">
+      <h2>Build faster with answers you can verify</h2>
+      <p class="lead" style="margin:0 auto">Join the early access list and be first to try DocuMind AI.</p>
+      <form class="contact" id="form">
+        <input type="text" id="email" placeholder="you@company.com" required>
+        <button class="btn btn-primary" type="submit">Join waitlist</button>
       </form>
-    </div></section>
-  </main>
-  <footer class="site-footer"><a class="brand" href="#top"><span class="brand-mark">OP<span>.</span></span><span class="brand-name">DIGITAL STUDIO</span></a><p>Independent thinking. Digital craft.</p><div class="footer-bottom"><span>© 2026 OP Digital Studio</span><span>Founded by Om Pujhari · India</span><a href="mailto:{{ contact_email }}">{{ contact_email }}</a><a href="https://github.com/ompujari1-sudo" target="_blank" rel="noopener noreferrer">GitHub ↗</a></div></footer>
-  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+      <p id="thanks" style="margin-top:14px;color:var(--ok);display:none">Thanks! We will be in touch soon.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container foot">
+    <div>© 2026 DocuMind AI. All rights reserved.</div>
+    <div>AI answers can contain mistakes. Always verify against the cited sources.</div>
+  </div>
+</footer>
+
+<script>
+// Tabs
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
+  t.classList.add('active');
+  document.getElementById('p-'+t.dataset.p).classList.add('active');
+}));
+
+// Chat demo (sample responses; replace with fetch('/api/chat') later)
+const chat=document.getElementById('chat'), qi=document.getElementById('q');
+function add(html,cls){const d=document.createElement('div');d.className='msg '+cls;d.innerHTML=html;chat.appendChild(d);chat.scrollTop=chat.scrollHeight;return d}
+function esc(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function answer(q){
+  const t=q.toLowerCase();
+  if(t.includes('auth')) return `<span class="label l-doc">FROM YOUR DOCUMENT</span><br>The manual specifies <b>OAuth 2.0 bearer tokens</b>. Each request must send the token in the <code>Authorization</code> header.<div class="cite"><b>PaymentsAPI_Manual_v2.pdf · p.12</b><br>Clients must authenticate using a bearer access token obtained from the token endpoint.</div>`;
+  if(t.includes('token')||t.includes('valid')) return `<span class="label l-doc">FROM YOUR DOCUMENT</span><br>Access tokens are valid for <b>30 minutes</b> and must be refreshed after that.<div class="cite"><b>PaymentsAPI_Manual_v2.pdf · p.14</b><br>Access tokens expire after 30 minutes. Use the refresh token to obtain a new one.</div>`;
+  return `<span class="label l-ext">EXTERNAL AI · NOT FROM YOUR DOCUMENT</span><br>Your uploaded manual does not cover this topic. Here is a general explanation: GraphQL subscriptions keep a long-lived connection (often a WebSocket) so the server can push updates to the client when subscribed data changes.<div class="cite">No document sources. Verify with official documentation.</div>`;
+}
+function ask(q){
+  if(!q.trim())return;
+  add(esc(q),'user'); qi.value='';
+  const typing=add('Searching documents…','ai');
+  setTimeout(()=>{typing.remove();add(answer(q),'ai')},700);
+}
+document.getElementById('send').onclick=()=>ask(qi.value);
+qi.addEventListener('keydown',e=>{if(e.key==='Enter')ask(qi.value)});
+document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>ask(c.dataset.q));
+
+// Library upload (UI only)
+document.getElementById('file').addEventListener('change',e=>{
+  const f=e.target.files[0]; if(!f)return;
+  const ext=f.name.split('.').pop().toLowerCase();
+  if(!['pdf','md'].includes(ext)||f.size>20*1024*1024){alert('Only PDF or Markdown files up to 20 MB are supported.');return}
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td>${esc(f.name)}</td><td>${ext==='pdf'?'PDF':'Markdown'}</td><td>–</td><td><span class="st st-pr">Processing</span></td>`;
+  document.getElementById('docs').appendChild(tr);
+  setTimeout(()=>{tr.lastElementChild.innerHTML='<span class="st st-ok">Indexed</span>'},1800);
+});
+
+// Debug demo
+document.getElementById('analyze').onclick=()=>document.getElementById('debug-out').classList.add('show');
+
+// Waitlist (UI only)
+document.getElementById('form').addEventListener('submit',e=>{
+  e.preventDefault();
+  document.getElementById('thanks').style.display='block';
+  e.target.reset();
+});
+</script>
 </body>
 </html>
